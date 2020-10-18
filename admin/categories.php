@@ -1,3 +1,38 @@
+<?php
+include('config.php');
+$errors = array();
+$message = '';
+if (isset($_POST['submit'])) {
+    $name = isset($_POST['name']) ? $_POST['name'] : '';
+    $id = isset($_POST['id']) ? $_POST['id'] : '';
+  
+
+    if ($id == '') {
+        array_push($errors, array('input' => 'id', 'msg' => 'id empty'));
+    }
+    if ($name == '') {
+        array_push($errors, array('input' => 'name', 'msg' => 'name empty'));
+    }
+    $sql = "SELECT id FROM categories WHERE 
+        `id`='" . $id . "'";
+    $fire = mysqli_query($conn, $sql) or die("can not fire the query" . mysqli_query($conn, $sql));
+    if (mysqli_num_rows($fire) > 0) {
+        array_push($errors, array('query' => 'add', 'msg' => "id exists"));
+    }
+    if (sizeof($errors) == 0) {
+        $sql = "INSERT INTO categories(`id`, `name`)VALUES
+        ('" . $id . "', '" . $name . "')";
+
+        if ($conn->query($sql) === true) {
+            //echo "New record created successfully";
+        } else {
+            $errors[] = array('input' => 'form', 'msg' => $conn->error);
+            //echo "Error: " . $sql . "<br>" . $conn->error;
+        }
+
+        $conn->close();
+    }
+}?>
 <?php include('header.php'); ?>
 <?php include('sidebar.php'); ?>
 
@@ -16,6 +51,16 @@
     <!-- Page Head -->
     <h2>Welcome John</h2>
     <p id="page-intro">What would you like to do?</p>
+    <div>
+    <?php if (sizeof($errors)>0) : ?>
+            <ul>
+                <?php foreach ($errors as $key => $error) : ?>
+                    <li><?php echo $error['msg'];?>
+                    </li>
+                <?php endforeach; ?>
+            </ul>
+    <?php endif; ?>
+    </div>
 
 
     <div class="clear"></div> <!-- End .clear -->
@@ -25,7 +70,7 @@
 
         <div class="content-box-header">
 
-            <h3>Content box</h3>
+            <h3>Categories box</h3>
 
             <ul class="content-box-tabs">
                 <li><a href="#tab1" class="default-tab">Manage</a></li>
@@ -218,49 +263,20 @@
                         <!-- Set class to "column-left" or "column-right" on fieldsets to divide the form into columns -->
 
                         <p>
-                            <label>Small form input</label>
-                            <input class="text-input small-input" type="text" id="small-input" name="small-input" /> <span class="input-notification success png_bg">Successful message</span> <!-- Classes for input-notification: success, error, information, attention -->
-                            <br /><small>A small description of the field</small>
+                            <label>Id</label>
+                            <input class="text-input small-input" type="text" name="id" />
+                            <!--<span class="input-notification success png_bg">Successful message</span>  Classes for input-notification: success, error, information, attention -->
+                            <!--<br /><small>A small description of the field</small> -->
+                        </p>
+                        <p>
+                            <label>Name</label>
+                            <input class="text-input small-input" type="text" id="small-input" name="name" />
+                            <!--<span class="input-notification success png_bg">Successful message</span>  Classes for input-notification: success, error, information, attention -->
+                            <!--<br /><small>A small description of the field</small> -->
                         </p>
 
                         <p>
-                            <label>Medium form input</label>
-                            <input class="text-input medium-input datepicker" type="text" id="medium-input" name="medium-input" /> <span class="input-notification error png_bg">Error message</span>
-                        </p>
-
-                        <p>
-                            <label>Large form input</label>
-                            <input class="text-input large-input" type="text" id="large-input" name="large-input" />
-                        </p>
-
-                        <p>
-                            <label>Checkboxes</label>
-                            <input type="checkbox" name="checkbox1" /> This is a checkbox <input type="checkbox" name="checkbox2" /> And this is another checkbox
-                        </p>
-
-                        <p>
-                            <label>Radio buttons</label>
-                            <input type="radio" name="radio1" /> This is a radio button<br />
-                            <input type="radio" name="radio2" /> This is another radio button
-                        </p>
-
-                        <p>
-                            <label>This is a drop down list</label>
-                            <select name="dropdown" class="small-input">
-                                <option value="option1">Option 1</option>
-                                <option value="option2">Option 2</option>
-                                <option value="option3">Option 3</option>
-                                <option value="option4">Option 4</option>
-                            </select>
-                        </p>
-
-                        <p>
-                            <label>Textarea with WYSIWYG</label>
-                            <textarea class="text-input textarea wysiwyg" id="textarea" name="textfield" cols="79" rows="15"></textarea>
-                        </p>
-
-                        <p>
-                            <input class="button" type="submit" value="Submit" />
+                            <input class="button" type="submit" value="Submit" name="submit" />
                         </p>
 
                     </fieldset>

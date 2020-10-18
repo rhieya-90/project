@@ -13,9 +13,10 @@ if (isset($_POST['submit'])) {
     $category = isset($_POST['category']) ? $_POST['category'] : '';
     $description = isset($_POST['description']) ? $_POST['description'] : '';
     if (isset($_POST['check_list'])) {
-        foreach ($tags as $selected) {
+        foreach ($_POST['check_list'] as $selected) {
             array_push($tags, array($selected));
         }
+        echo $tags;
     }
 
     if ($id == '') {
@@ -81,6 +82,9 @@ if (isset($_POST['submit'])) {
     <p id="page-intro">What would you like to do?</p>
     
     <div>
+    <?php echo "<pre>";
+    print_r($tags);
+    echo "</pre>"; ?>
     <?php if (sizeof($errors)>0) : ?>
             <ul>
                 <?php foreach ($errors as $key => $error) : ?>
@@ -311,11 +315,17 @@ if (isset($_POST['submit'])) {
                         <p>
                             <label>Category</label>
                             <select name="category" class="small-input">
-                                <option value="1">Men</option>
-                                <option value="2">Women</option>
-                                <option value="3">Kids</option>
-                                <option value="4">Electronics</option>
-                                <option value="5">Sports</option>
+                                <?php
+                                $sql = "SELECT * FROM categories";
+                                $result = $conn->query($sql);
+                                if ($result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {
+                                ?>
+                                <option value="<?php echo $row['name'] ?>"><?php echo $row['name'] ?></option>
+                                <?php
+        }
+    }
+    $conn->close();?>
                             </select>
                         </p>
 
@@ -327,12 +337,20 @@ if (isset($_POST['submit'])) {
 
                         <p>
                             <label>Tags</label>
-                            <input type="checkbox" name="check_list[]" /> Fashion
-                            <input type="checkbox" name="check_list[]" /> Ecommerce
-                            <input type="checkbox" name="check_list[]" /> Shop
-                            <input type="checkbox" name="check_list[]" /> Hand Bag
-                            <input type="checkbox" name="check_list[]" /> Headphone
-                        </p>
+                            <?php
+                            $sql = "SELECT * FROM products";
+                            $result = $conn->query($sql);
+                            ?>
+                            
+                            <?php
+                                if ($result->num_rows > 0) {
+                                    while ($row = $result->fetch_assoc()) {?>
+                            <input type="checkbox" name="check_list[]" value="<?php echo $row['name'] ?>"/> <?php echo $row['name'] ?>
+                            <?php
+        }
+    }
+    $conn->close();?>
+                             </p>
 
                         <!--<p>
                             <label>Radio buttons</label>
