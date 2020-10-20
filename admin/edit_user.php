@@ -29,27 +29,6 @@ if (isset($_POST['update'])) {
     if ($email=='') {
         array_push($errors, array('input'=>'email', 'msg'=>'email empty'));
     }
-    $sql = "SELECT username FROM users WHERE 
-        `username`='".$username."'";
-    $fire =mysqli_query($conn, $sql) or die("can not fire the query".mysqli_query($conn, $sql));
-    if (mysqli_num_rows($fire)>0) {
-        array_push($errors, array('query'=>'reg','msg'=>"username exists"));
-    }
-
-    
-    $sql = "SELECT email FROM users WHERE 
-         `email`='".$email."'";
-    $fire =mysqli_query($conn, $sql) or die("can not fire the query".mysqli_query($conn, $sql));
-    if (mysqli_num_rows($fire)>0) {
-        array_push($errors, array('query'=>'reg','msg'=>"email exists"));
-    }
-    $sql = "SELECT id FROM users WHERE 
-         `id`='".$id."'";
-    $fire =mysqli_query($conn, $sql) or die("can not fire the query".mysqli_query($conn, $sql));
-    if (mysqli_num_rows($fire)>0) {
-        array_push($errors, array('query'=>'reg','msg'=>"id exists"));
-    }
-
     if (sizeof($errors) == 0) {
         $sql = "UPDATE users SET username='$username',dob='$dob',category='$category',email='$email',address='$address'WHERE id='$id'";
 
@@ -68,9 +47,24 @@ if (isset($_POST['update'])) {
     }
 
 ?>
+<?php include('header.php'); ?>
+<?php include('sidebar.php'); ?>
 
+<div id="main-content">
+    <!-- Main Content Section with everything -->
 
+    <noscript>
+        <!-- Show a notification if the user has disabled javascript -->
+        <div class="notification error png_bg">
+            <div>
+                Javascript is disabled or is not supported by your browser. Please <a href="http://browsehappy.com/" title="Upgrade to a better browser">upgrade</a> your browser or <a href="http://www.google.com/support/bin/answer.py?answer=23852" title="Enable Javascript in your browser">enable</a> Javascript to navigate the interface properly.
+            </div>
+        </div>
+    </noscript>
 
+    <!-- Page Head -->
+    <h2>Welcome John</h2>
+    <p id="page-intro">What would you like to do?</p>
     <div>
         <?php if (sizeof($errors) > 0) : ?>
             <ul>
@@ -83,7 +77,28 @@ if (isset($_POST['update'])) {
     </div>
 
 
-    
+    <div class="clear"></div> <!-- End .clear -->
+
+    <div class="content-box">
+        <!-- Start Content Box -->
+
+        <div class="content-box-header">
+
+            <h3>Categories box</h3>
+
+            <ul class="content-box-tabs">
+                <!-- href must be unique and match the id of target div -->
+                <li><a href="#tab2">Edit</a></li>
+            </ul>
+
+            <div class="clear"></div>
+
+        </div> <!-- End .content-box-header -->
+
+        <div class="content-box-content">
+
+
+            <div class="tab-content" id="tab2">
 
                 <form action="" method="post" enctype="multipart/form-data">
 
@@ -137,7 +152,7 @@ if (isset($_POST['update'])) {
                             <!--<br /><small>A small description of the field</small> -->
                         </p>
                         <p>
-                            <input class="button" type="submit" value="Submit" name="submit" />
+                            <input class="button" type="submit" value="Update" name="update" />
                         </p>
 
                     </fieldset>
@@ -145,4 +160,13 @@ if (isset($_POST['update'])) {
                     <div class="clear"></div><!-- End .clear -->
 
                 </form>
-            
+            </div> <!-- End #tab2 -->
+
+        </div> <!-- End .content-box-content -->
+
+    </div> <!-- End .content-box -->
+
+
+    <div class="clear"></div>
+
+<?php include('footer.php'); ?>
