@@ -103,78 +103,78 @@ if (isset($_POST['update'])) {
 
         </div> <!-- End .content-box-header -->
 
-            <div class="tab-content" id="tab2">
+        <div class="tab-content" id="tab2">
 
-                <form action="" method="post" enctype="multipart/form-data">
+            <form action="" method="post" enctype="multipart/form-data">
 
-                    <fieldset>
-                        <!-- Set class to "column-left" or "column-right" on fieldsets to divide the form into columns -->
-                        <p>
-                            <label>Id</label>
-                            <input class="text-input small-input" value="<?php echo $_GET['id'] ?>" type="text" name="id" />
-                            <!--<span class="input-notification success png_bg">Successful message</span>  Classes for input-notification: success, error, information, attention -->
-                            <!--<br /><small>A small description of the field</small> -->
-                        </p>
-                        <p>
-                            <label>Name</label>
-                            <input class="text-input small-input" value="<?php echo $_GET['name'] ?>" type="text" id="small-input" name="name" />
-                            <!--<span class="input-notification success png_bg">Successful message</span>  Classes for input-notification: success, error, information, attention -->
-                            <!--<br /><small>A small description of the field</small> -->
-                        </p>
-                        <p>
-                            <label>Color</label>
-                            <input class="text-input small-input" value="<?php echo $_GET['color'] ?>" type="text" id="small-input" name="color" />
-                            <!--<span class="input-notification success png_bg">Successful message</span>  Classes for input-notification: success, error, information, attention -->
-                            <!--<br /><small>A small description of the field</small> -->
-                        </p>
+                <fieldset>
+                    <!-- Set class to "column-left" or "column-right" on fieldsets to divide the form into columns -->
+                    <p>
+                        <label>Id</label>
+                        <input class="text-input small-input" value="<?php echo $_GET['id'] ?>" type="text" name="id" />
+                        <!--<span class="input-notification success png_bg">Successful message</span>  Classes for input-notification: success, error, information, attention -->
+                        <!--<br /><small>A small description of the field</small> -->
+                    </p>
+                    <p>
+                        <label>Name</label>
+                        <input class="text-input small-input" value="<?php echo $_GET['name'] ?>" type="text" id="small-input" name="name" />
+                        <!--<span class="input-notification success png_bg">Successful message</span>  Classes for input-notification: success, error, information, attention -->
+                        <!--<br /><small>A small description of the field</small> -->
+                    </p>
+                    <p>
+                        <label>Color</label>
+                        <input class="text-input small-input" value="<?php echo $_GET['color'] ?>" type="text" id="small-input" name="color" />
+                        <!--<span class="input-notification success png_bg">Successful message</span>  Classes for input-notification: success, error, information, attention -->
+                        <!--<br /><small>A small description of the field</small> -->
+                    </p>
 
-                        <p>
-                            <label>Price</label>
-                            <input class="text-input medium-input datepicker" value="<?php echo $_GET['price'] ?>" type="text" id="medium-input" name="price" />
-                            <!--<span class="input-notification error png_bg">Error message</span> -->
-                        </p>
-                        <p>
-                            <label for="file">Images</label>
-                            <input value="<?php echo $_GET['image'] ?>" type="file" name="file" id="file">
-                            <!--<input type="submit" name="file to upload" id="fileToUpload"> -->
-                        </p>
-                        <label>Category</label>
-                        <select name="category" class="small-input">
-                            <?php
-                            $sql = "SELECT * FROM categories";
-                            $result = $conn->query($sql);
-                            if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) {
-                            ?>
-                                    <option value="<?php echo $row['name']; ?>"><?php echo $row['name']; ?></option>
-                            <?php
-                                }
+                    <p>
+                        <label>Price</label>
+                        <input class="text-input medium-input datepicker" value="<?php echo $_GET['price'] ?>" type="text" id="medium-input" name="price" />
+                        <!--<span class="input-notification error png_bg">Error message</span> -->
+                    </p>
+                    <p>
+                        <label for="file">Images</label>
+                        <input value="<?php echo $_GET['image'] ?>" type="file" name="file" id="file">
+                        <!--<input type="submit" name="file to upload" id="fileToUpload"> -->
+                    </p>
+                    <label>Category</label>
+                    <select name="category" class="small-input">
+                        <?php
+                        $sql = "SELECT * FROM categories";
+                        $result = $conn->query($sql);
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                        ?>
+                                <option value="<?php echo $row['name']; ?>"><?php echo $row['name']; ?></option>
+                        <?php
                             }
-                            ?>
-                        </select>
-                        </p>
-                        <p>
-                            <label>Tags</label>
-                            <?php
-                            $sql = "SELECT * FROM tags";
-                            $result = $conn->query($sql);
-                            ?>
+                        }
+                        ?>
+                    </select>
+                    </p>
+                    <p>
+                        <label>Tags</label>
+                        <?php
+                        $sql = "SELECT * FROM tags";
+                        $result = $conn->query($sql);
+                        ?>
 
-                            <?php
-                            if ($result->num_rows > 0) {
-                                while ($row = $result->fetch_assoc()) { ?>
-                                    <input type="checkbox" name="check_list[]" value="<?php echo $row['name']; ?>" /> <?php echo $row['name']; ?>
-                            <?php
-                                }
+                        <?php
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) { ?>
+                                <input type="checkbox" name="check_list[]" value="<?php echo $row['name']; ?>" /> <?php echo $row['name']; ?>
+                        <?php
                             }
-                            $conn->close(); ?>
-                            <!--<p>
+                        }
+                        $conn->close(); ?>
+                        <!--<p>
                             
                             <label>Large form input</label>
                             <input class="text-input large-input" type="text" id="large-input" name="large-input" />
                         </p>n -->
 
-                            <!--<p>
+                        <!--<p>
                             <label>Radio buttons</label>
                             <input type="radio" name="radio1" /> This is a radio button<br />
                             <input type="radio" name="radio2" /> This is another radio button
@@ -182,28 +182,28 @@ if (isset($_POST['update'])) {
 
 
 
-                            <p>
-                                <label>Description</label>
-                                <textarea class="text-input textarea wysiwyg"  id="textarea" name="description" cols="79" rows="15"></textarea>
-                            </p>
+                        <p>
+                            <label>Description</label>
+                            <textarea class="text-input textarea wysiwyg" id="textarea" name="description" cols="79" rows="15"></textarea>
+                        </p>
 
-                            <p>
-                                <input class="button" type="submit" value="Update" name="update" />
-                            </p>
+                        <p>
+                            <input class="button" type="submit" value="Update" name="update" />
+                        </p>
 
-                    </fieldset>
+                </fieldset>
 
-                    <div class="clear"></div><!-- End .clear -->
+                <div class="clear"></div><!-- End .clear -->
 
-                </form>
+            </form>
 
-            </div> <!-- End #tab2 -->
+        </div> <!-- End #tab2 -->
 
-        </div> <!-- End .content-box-content -->
+    </div> <!-- End .content-box-content -->
 
-    </div> <!-- End .content-box -->
+</div> <!-- End .content-box -->
 
 
-    <div class="clear"></div>
+<div class="clear"></div>
 
-    <?php include('footer.php'); ?>
+<?php include('footer.php'); ?>
