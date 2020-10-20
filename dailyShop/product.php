@@ -7,6 +7,8 @@ if (isset($_GET["page"])) {
 };
 $start_from = ($page - 1) * $limit;
 $result = mysqli_query($conn, "SELECT * FROM products ORDER BY id ASC LIMIT $start_from, $limit");
+$result_cat = mysqli_query($conn, "SELECT * FROM categories");
+$result_tag = mysqli_query($conn, "SELECT * FROM tags");
 
 $result_db = mysqli_query($conn, "SELECT COUNT(id) FROM products");
 $row_db = mysqli_fetch_row($result_db);
@@ -396,12 +398,14 @@ $total_pages = ceil($total_records / $limit);
                 <a id="list-catg" href="#"><span class="fa fa-list"></span></a>
               </div>
             </div>
+            <?php
+          if (mysqli_num_rows($result)>0){
+							while ($row = mysqli_fetch_array($result)) {
+							?>
             <div class="aa-product-catg-body">
               <ul class="aa-product-catg">
 				<!-- start single product item -->
-				<?php
-							while ($row = mysqli_fetch_array($result)) {
-							?>
+				
                 <li>
 									<figure>
 										<a class="aa-product-img" href="#"><img src="<?php echo $row["image"]; ?>" alt="polo shirt img"></a>
@@ -415,17 +419,15 @@ $total_pages = ceil($total_records / $limit);
 									<div class="aa-product-hvr-content">
 										<a href="#" data-toggle="tooltip" data-placement="top" title="Add to Wishlist"><span class="fa fa-heart-o"></span></a>
 										<a href="#" data-toggle="tooltip" data-placement="top" title="Compare"><span class="fa fa-exchange"></span></a>
-										<a href="#" data-toggle2="tooltip" data-placement="top" title="Quick View" data-toggle="modal" data-target="#quick-view-modal"><span class="fa fa-search"></span></a>
+										<a href="#" data-toggle2="tooltip" data-placement="top" title="Quick View" data-toggle="modal" data-target="#<?php $row['id'] ?>"><span class="fa fa-search"></span></a>
 									</div>
 									<!-- product badge -->
 									<!--<span class="aa-badge aa-sale" href="#">SALE!</span> -->
 								</li>
-							<?php
-							};
-							?>    
+						  
               </ul>
               <!-- quick view modal -->                  
-              <div class="modal fade" id="quick-view-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+              <div class="modal fade" id="<?php $row['id']; ?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                 <div class="modal-dialog">
                   <div class="modal-content">                      
                     <div class="modal-body">
@@ -471,8 +473,8 @@ $total_pages = ceil($total_records / $limit);
                               <span class="aa-product-view-price">$34.99</span>
                               <p class="aa-product-avilability">Avilability: <span>In stock</span></p>
                             </div>
-                            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Officiis animi, veritatis quae repudiandae quod nulla porro quidem, itaque quis quaerat!</p>
-                            <h4>Size</h4>
+                            <p><?php $row['long_description'] ?></p>
+                            <h4><?php $row['name'] ?></h4>
                             <div class="aa-prod-view-size">
                               <a href="#">S</a>
                               <a href="#">M</a>
@@ -505,8 +507,13 @@ $total_pages = ceil($total_records / $limit);
                   </div><!-- /.modal-content -->
                 </div><!-- /.modal-dialog -->
               </div>
-              <!-- / quick view modal -->   
+              <!-- / quick view modal --> 
+              
             </div>
+            <?php
+              }
+							};
+							?>   
             <div class="aa-product-catg-pagination">
               <nav>
 			  <?php
@@ -534,26 +541,28 @@ $total_pages = ceil($total_records / $limit);
           <aside class="aa-sidebar">
             <!-- single sidebar -->
             <div class="aa-sidebar-widget">
-              <h3>Category</h3>
+            <h3>Category</h3>
               <ul class="aa-catg-nav">
-                <li><a href="#">Men</a></li>
-                <li><a href="">Women</a></li>
-                <li><a href="">Kids</a></li>
-                <li><a href="">Electornics</a></li>
-                <li><a href="">Sports</a></li>
+              <?php
+            if (mysqli_num_rows($result_cat)>0){
+							while ($row = mysqli_fetch_array($result_cat)) {
+							?>
+                <li><a href="#"><?php echo $row['name']; ?></a></li>
+              <?php }
+              } ?>
               </ul>
             </div>
             <!-- single sidebar -->
             <div class="aa-sidebar-widget">
               <h3>Tags</h3>
               <div class="tag-cloud">
-                <a href="#">Fashion</a>
-                <a href="#">Ecommerce</a>
-                <a href="#">Shop</a>
-                <a href="#">Hand Bag</a>
-                <a href="#">Laptop</a>
-                <a href="#">Head Phone</a>
-                <a href="#">Pen Drive</a>
+              <?php
+            if (mysqli_num_rows($result_tag)>0){
+							while ($row = mysqli_fetch_array($result_tag)) {
+							?>
+                <a href="#"><?php echo $row['name']; ?></a>
+              <?php }
+              } ?>
               </div>
             </div>
             <!-- single sidebar -->
@@ -657,3 +666,4 @@ $total_pages = ceil($total_records / $limit);
 
 
   <?php include('footer.php'); ?>
+  <script>

@@ -1,22 +1,21 @@
 <?php
 include('config.php');
 $errors = array();
-$tags=array();
 $message = '';
 if (isset($_POST['submit'])) {
     $name = isset($_POST['name']) ? $_POST['name'] : '';
     $id = isset($_POST['id']) ? $_POST['id'] : '';
     $price = isset($_POST['price']) ? $_POST['price'] : '';
+    $color = isset($_POST['color']) ? $_POST['color'] : '';
     $filename = isset($_FILES['file']) ? $_FILES['file']['name'] : '';
     $file_temp_name = isset($_FILES['file']) ? $_FILES['file']['tmp_name'] : '';
-    $folder = "images/".$filename;
+    $folder = "images/" . $filename;
     $category = isset($_POST['category']) ? $_POST['category'] : '';
     $description = isset($_POST['description']) ? $_POST['description'] : '';
+    $tags = isset($_POST['check_list']) ? $_POST['check_list'] : '';
     if (isset($_POST['check_list'])) {
-        foreach ($_POST['check_list'] as $selected) {
-            array_push($tags, array($selected));
-        }
-        echo $tags;
+        $tag_ = $_POST['check_list'];
+        $tag = implode(",", $tag_);
     }
 
     if ($id == '') {
@@ -28,27 +27,27 @@ if (isset($_POST['submit'])) {
     if ($price == '') {
         array_push($errors, array('input' => 'price', 'msg' => 'price empty'));
     }
-    if ($filename== '') {
+    if ($filename == '') {
         array_push($errors, array('input' => 'file', 'msg' => 'file empty'));
     }
     if ($category == '') {
         array_push($errors, array('input' => 'category', 'msg' => 'category empty'));
     }
-    if ($tags == '') {
-        array_push($errors, array('input' => 'tags', 'msg' => 'tags empty'));
-    }
     if ($description == '') {
         array_push($errors, array('input' => 'description', 'msg' => 'description empty'));
     }
-    $sql = "SELECT name FROM products WHERE 
+    if ($color == '') {
+        array_push($errors, array('input' => 'color', 'msg' => 'color empty'));
+    }
+    $sql = "SELECT id FROM products WHERE 
         `id`='" . $id . "'";
     $fire = mysqli_query($conn, $sql) or die("can not fire the query" . mysqli_query($conn, $sql));
     if (mysqli_num_rows($fire) > 0) {
         array_push($errors, array('query' => 'add', 'msg' => "id exists"));
     }
     if (sizeof($errors) == 0) {
-        $sql = "INSERT INTO products(`id`, `name`, `price`, `image`, `long_description`, `category_id`)VALUES
-        ('" . $id . "', '" . $name . "', '" . $price . "', '" . $folder . "', '" . $description . "', '" . $category . "')";
+        $sql = "INSERT INTO products(`id`, `name`, `price`, `image`, `long_description`, `category_id`, `color`, `tags`)VALUES
+        ('" . $id . "', '" . $name . "', '" . $price . "', '" . $folder . "', '" . $description . "', '" . $category . "', '" . $color . "', '" . $tag . "')";
 
         if ($conn->query($sql) === true) {
             //echo "New record created successfully";
@@ -80,21 +79,18 @@ if (isset($_POST['submit'])) {
     <!-- Page Head -->
     <h2>Welcome John</h2>
     <p id="page-intro">What would you like to do?</p>
-    
+
     <div>
-    <?php echo "<pre>";
-    print_r($tags);
-    echo "</pre>"; ?>
-    <?php if (sizeof($errors)>0) : ?>
+        <?php if (sizeof($errors) > 0) : ?>
             <ul>
                 <?php foreach ($errors as $key => $error) : ?>
-                    <li><?php echo $error['msg'];?>
+                    <li><?php echo $error['msg']; ?>
                     </li>
                 <?php endforeach; ?>
             </ul>
         <?php endif; ?>
     </div>
-    
+
 
     <div class="clear"></div> <!-- End .clear -->
 
@@ -103,7 +99,7 @@ if (isset($_POST['submit'])) {
 
         <div class="content-box-header">
 
-            <h3>Content box</h3>
+            <h3>Products box</h3>
 
             <ul class="content-box-tabs">
                 <li><a href="#tab1" class="default-tab">Manage</a></li> <!-- href must be unique and match the id of target div -->
@@ -131,11 +127,14 @@ if (isset($_POST['submit'])) {
                     <thead>
                         <tr>
                             <th><input class="check-all" type="checkbox" /></th>
-                            <th>Column 1</th>
-                            <th>Column 2</th>
-                            <th>Column 3</th>
-                            <th>Column 4</th>
-                            <th>Column 5</th>
+                            <th>ID</th>
+                            <th>IMAGE</th>
+                            <th>NAME</th>
+                            <th>PRICE</th>
+                            <th>DESCRIPTION</th>
+                            <th>CATEGORY_ID</th>
+                            <th>COLOR</th>
+                            <th>TAGS</th>
                         </tr>
 
                     </thead>
@@ -166,117 +165,32 @@ if (isset($_POST['submit'])) {
                     </tfoot>
 
                     <tbody>
-                        <tr>
-                            <td><input type="checkbox" /></td>
-                            <td>Lorem ipsum dolor</td>
-                            <td><a href="#" title="title">Sit amet</a></td>
-                            <td>Consectetur adipiscing</td>
-                            <td>Donec tortor diam</td>
-                            <td>
-                                <!-- Icons -->
-                                <a href="#" title="Edit"><img src="resources/images/icons/pencil.png" alt="Edit" /></a>
-                                <a href="#" title="Delete"><img src="resources/images/icons/cross.png" alt="Delete" /></a>
-                                <a href="#" title="Edit Meta"><img src="resources/images/icons/hammer_screwdriver.png" alt="Edit Meta" /></a>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td><input type="checkbox" /></td>
-                            <td>Lorem ipsum dolor</td>
-                            <td><a href="#" title="title">Sit amet</a></td>
-                            <td>Consectetur adipiscing</td>
-                            <td>Donec tortor diam</td>
-                            <td>
-                                <!-- Icons -->
-                                <a href="#" title="Edit"><img src="resources/images/icons/pencil.png" alt="Edit" /></a>
-                                <a href="#" title="Delete"><img src="resources/images/icons/cross.png" alt="Delete" /></a>
-                                <a href="#" title="Edit Meta"><img src="resources/images/icons/hammer_screwdriver.png" alt="Edit Meta" /></a>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td><input type="checkbox" /></td>
-                            <td>Lorem ipsum dolor</td>
-                            <td><a href="#" title="title">Sit amet</a></td>
-                            <td>Consectetur adipiscing</td>
-                            <td>Donec tortor diam</td>
-                            <td>
-                                <!-- Icons -->
-                                <a href="#" title="Edit"><img src="resources/images/icons/pencil.png" alt="Edit" /></a>
-                                <a href="#" title="Delete"><img src="resources/images/icons/cross.png" alt="Delete" /></a>
-                                <a href="#" title="Edit Meta"><img src="resources/images/icons/hammer_screwdriver.png" alt="Edit Meta" /></a>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td><input type="checkbox" /></td>
-                            <td>Lorem ipsum dolor</td>
-                            <td><a href="#" title="title">Sit amet</a></td>
-                            <td>Consectetur adipiscing</td>
-                            <td>Donec tortor diam</td>
-                            <td>
-                                <!-- Icons -->
-                                <a href="#" title="Edit"><img src="resources/images/icons/pencil.png" alt="Edit" /></a>
-                                <a href="#" title="Delete"><img src="resources/images/icons/cross.png" alt="Delete" /></a>
-                                <a href="#" title="Edit Meta"><img src="resources/images/icons/hammer_screwdriver.png" alt="Edit Meta" /></a>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td><input type="checkbox" /></td>
-                            <td>Lorem ipsum dolor</td>
-                            <td><a href="#" title="title">Sit amet</a></td>
-                            <td>Consectetur adipiscing</td>
-                            <td>Donec tortor diam</td>
-                            <td>
-                                <!-- Icons -->
-                                <a href="#" title="Edit"><img src="resources/images/icons/pencil.png" alt="Edit" /></a>
-                                <a href="#" title="Delete"><img src="resources/images/icons/cross.png" alt="Delete" /></a>
-                                <a href="#" title="Edit Meta"><img src="resources/images/icons/hammer_screwdriver.png" alt="Edit Meta" /></a>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td><input type="checkbox" /></td>
-                            <td>Lorem ipsum dolor</td>
-                            <td><a href="#" title="title">Sit amet</a></td>
-                            <td>Consectetur adipiscing</td>
-                            <td>Donec tortor diam</td>
-                            <td>
-                                <!-- Icons -->
-                                <a href="#" title="Edit"><img src="resources/images/icons/pencil.png" alt="Edit" /></a>
-                                <a href="#" title="Delete"><img src="resources/images/icons/cross.png" alt="Delete" /></a>
-                                <a href="#" title="Edit Meta"><img src="resources/images/icons/hammer_screwdriver.png" alt="Edit Meta" /></a>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td><input type="checkbox" /></td>
-                            <td>Lorem ipsum dolor</td>
-                            <td><a href="#" title="title">Sit amet</a></td>
-                            <td>Consectetur adipiscing</td>
-                            <td>Donec tortor diam</td>
-                            <td>
-                                <!-- Icons -->
-                                <a href="#" title="Edit"><img src="resources/images/icons/pencil.png" alt="Edit" /></a>
-                                <a href="#" title="Delete"><img src="resources/images/icons/cross.png" alt="Delete" /></a>
-                                <a href="#" title="Edit Meta"><img src="resources/images/icons/hammer_screwdriver.png" alt="Edit Meta" /></a>
-                            </td>
-                        </tr>
-
-                        <tr>
-                            <td><input type="checkbox" /></td>
-                            <td>Lorem ipsum dolor</td>
-                            <td><a href="#" title="title">Sit amet</a></td>
-                            <td>Consectetur adipiscing</td>
-                            <td>Donec tortor diam</td>
-                            <td>
-                                <!-- Icons -->
-                                <a href="#" title="Edit"><img src="resources/images/icons/pencil.png" alt="Edit" /></a>
-                                <a href="#" title="Delete"><img src="resources/images/icons/cross.png" alt="Delete" /></a>
-                                <a href="#" title="Edit Meta"><img src="resources/images/icons/hammer_screwdriver.png" alt="Edit Meta" /></a>
-                            </td>
-                        </tr>
+                        <?php
+                        $sql = "SELECT * FROM products";
+                        $result = $conn->query($sql);
+                        if ($result->num_rows > 0) {
+                            while ($row = $result->fetch_assoc()) {
+                        ?>
+                                <tr>
+                                    <td><input type="checkbox" /></td>
+                                    <td><?php echo $row['id']; ?></td>
+                                    <td><a href="#" title="title"><?php echo $row['name']; ?></a></td>
+                                    <td><?php echo $row['image']; ?></td>
+                                    <td><?php echo $row['price']; ?></td>
+                                    <td><?php echo $row['long_description']; ?></td>
+                                    <td><?php echo $row['category_id']; ?></td>
+                                    <td><?php echo $row['color']; ?></td>
+                                    <td><?php echo $row['tags']; ?></td>
+                                    <td>
+                                        <!-- Icons -->
+                                        <a href="edit_product.php?id=<?php echo $row['id']; ?>&name=<?php echo $row['name']; ?>&image=<?php echo $row['image']; ?>&price=<?php echo $row['price']; ?>&description=<?php echo $row['long_description']; ?>&category=<?php echo $row['category_id']; ?>&color=<?php echo $row['color']; ?>&tags=<?php echo $row['tags']; ?>" title="Edit"><img src="resources/images/icons/pencil.png" alt="Edit" /></a>
+                                        <a href="delete_product.php?id=<?php echo $row['id']; ?> " title="Delete"><img src="resources/images/icons/cross.png" alt="Delete" /></a>
+                                        <a href="#" title="Edit Meta"><img src="resources/images/icons/hammer_screwdriver.png" alt="Edit Meta" /></a>
+                                    </td>
+                                </tr>
+                        <?php
+                            }
+                        } ?>
                     </tbody>
 
                 </table>
@@ -301,6 +215,12 @@ if (isset($_POST['submit'])) {
                             <!--<span class="input-notification success png_bg">Successful message</span>  Classes for input-notification: success, error, information, attention -->
                             <!--<br /><small>A small description of the field</small> -->
                         </p>
+                        <p>
+                            <label>Color</label>
+                            <input class="text-input small-input" type="text" id="small-input" name="color" />
+                            <!--<span class="input-notification success png_bg">Successful message</span>  Classes for input-notification: success, error, information, attention -->
+                            <!--<br /><small>A small description of the field</small> -->
+                        </p>
 
                         <p>
                             <label>Price</label>
@@ -312,47 +232,43 @@ if (isset($_POST['submit'])) {
                             <input type="file" name="file" id="file">
                             <!--<input type="submit" name="file to upload" id="fileToUpload"> -->
                         </p>
-                        <p>
-                            <label>Category</label>
-                            <select name="category" class="small-input">
-                                <?php
-                                $sql = "SELECT * FROM categories";
-                                $result = $conn->query($sql);
-                                if ($result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {
-                                ?>
-                                <option value="<?php echo $row['name'] ?>"><?php echo $row['name'] ?></option>
-                                <?php
-        }
-    }
-    $conn->close();?>
-                            </select>
+                        <label>Category</label>
+                        <select name="category" class="small-input">
+                            <?php
+                            $sql = "SELECT * FROM categories";
+                            $result = $conn->query($sql);
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) {
+                            ?>
+                                    <option value="<?php echo $row['name']; ?>"><?php echo $row['name']; ?></option>
+                            <?php
+                                }
+                            }
+                            ?>
+                        </select>
                         </p>
+                        <p>
+                            <label>Tags</label>
+                            <?php
+                            $sql = "SELECT * FROM tags";
+                            $result = $conn->query($sql);
+                            ?>
 
-                        <!--<p>
+                            <?php
+                            if ($result->num_rows > 0) {
+                                while ($row = $result->fetch_assoc()) { ?>
+                                    <input type="checkbox" name="check_list[]" value="<?php echo $row['name']; ?>" /> <?php echo $row['name']; ?>
+                            <?php
+                                }
+                            }
+                            $conn->close(); ?>
+                            <!--<p>
                             
                             <label>Large form input</label>
                             <input class="text-input large-input" type="text" id="large-input" name="large-input" />
                         </p>n -->
 
-                        <p>
-                            <label>Tags</label>
-                            <?php
-                            $sql = "SELECT * FROM products";
-                            $result = $conn->query($sql);
-                            ?>
-                            
-                            <?php
-                                if ($result->num_rows > 0) {
-                                    while ($row = $result->fetch_assoc()) {?>
-                            <input type="checkbox" name="check_list[]" value="<?php echo $row['name'] ?>"/> <?php echo $row['name'] ?>
-                            <?php
-        }
-    }
-    $conn->close();?>
-                             </p>
-
-                        <!--<p>
+                            <!--<p>
                             <label>Radio buttons</label>
                             <input type="radio" name="radio1" /> This is a radio button<br />
                             <input type="radio" name="radio2" /> This is another radio button
@@ -360,14 +276,14 @@ if (isset($_POST['submit'])) {
 
 
 
-                        <p>
-                            <label>Description</label>
-                            <textarea class="text-input textarea wysiwyg" id="textarea" name="description" cols="79" rows="15"></textarea>
-                        </p>
+                            <p>
+                                <label>Description</label>
+                                <textarea class="text-input textarea wysiwyg" id="textarea" name="description" cols="79" rows="15"></textarea>
+                            </p>
 
-                        <p>
-                            <input class="button" type="submit" value="Submit" name="submit"/>
-                        </p>
+                            <p>
+                                <input class="button" type="submit" value="Submit" name="submit" />
+                            </p>
 
                     </fieldset>
 
