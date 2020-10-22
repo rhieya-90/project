@@ -413,7 +413,7 @@ $total_pages = ceil($total_records / $limit);
 											<li>
 												<figure>
 													<a class="aa-product-img" href="#"><img src="<?php echo $row["image"]; ?>" alt="polo shirt img"></a>
-													<a class="aa-add-card-btn" href="#"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
+													<a class="aa-add-card-btn" href="cart.php?id=<?php  echo $row["id"];  ?>?quantity=1">"><span class="fa fa-shopping-cart"></span>Add To Cart</a>
 													<figcaption>
 														<h4 class="aa-product-title"><a href="#"><?php echo $row["name"]; ?></a></h4>
 														<span class="aa-product-price">$45.50</span><span class="aa-product-price"><del><?php echo $row["price"]; ?>/del></span>
